@@ -6,7 +6,7 @@ vm_options = {
 	memory: 4096
 }
 ansible_options = {
-	playbook: "01_installation/provision/playbook.yml",
+	"playbook": "01_installation/provision/playbook.yml",
   tags: ansible_roles,
 	extra_args: "./user.settings.yml"
 }
