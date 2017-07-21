@@ -1,6 +1,6 @@
 require_relative '01_installation/provision/ansible_vagrant'
 
-ansible_roles = ["default", "atom"]
+ansible_roles = ["atom"]
 
 vm_options = {
 	memory: 4096
