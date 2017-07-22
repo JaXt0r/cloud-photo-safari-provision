@@ -19,8 +19,8 @@ box:
   portforwardings:
     nodejs:
       protocol: tcp
-      host-port: 80
-      guest-port: 80
+      host-port: 3000
+      guest-port: 3000
   shares:
     share:
       host: D:\cloud-picture-frame\
