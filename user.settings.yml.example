@@ -17,11 +17,11 @@ box:
   monitorcount: 2
   paravirtprovider: default
   portforwardings:
-    webapp:
+    nodejs:
       protocol: tcp
-      host-port: 8080
-      guest-port: 8080
+      host-port: 80
+      guest-port: 80
   shares:
     share:
-      host: D:\dev\share
-      guest: /usr/local/shared_data
+      host: D:\cloud-picture-frame\
+      guest: /home/vagrant/Dokumente/cloud-picture-frame
