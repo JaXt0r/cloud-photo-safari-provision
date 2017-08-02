@@ -1,0 +1,5 @@
+# Create a copy of this file as settings.user.yml and modify the settings as per your desire
+user:
+  fullname: John Doe
+  email: john.doe@example.com
+  keyboard_layout: de
