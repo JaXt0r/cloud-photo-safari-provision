@@ -1,0 +1,27 @@
+---
+- name: general tasks
+  hosts: all
+  become: true
+  roles:
+   - { role: general, tags: ["always"] }
+
+
+- name: Atom Editor
+  hosts: all
+  become: true
+  roles:
+   - { role: atom, tags: ["atom"] }
+
+
+- name: nodejs server
+  hosts: all
+  become: true
+  roles:
+   - { role: nodejs, tags: ["nodejs"] }
+
+
+- name: wowza streaming server
+  hosts: all
+  become: true
+  roles:
+   - { role: wowza, tags: ["wowza"] }
