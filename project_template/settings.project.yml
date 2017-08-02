@@ -9,6 +9,7 @@ settings:
     no_proxy: 'localhost, 172.0.0.1'
 
 box:
+  name: example
   usb2: true
   memory: 4096
   cpus: 2
@@ -16,8 +17,8 @@ box:
   portforwardings:
     - name: tomcat
       protocol: tcp
-      host-port: 8080
-      guest-port: 8080
+      host_port: 8080
+      guest_port: 8080
 
 ansible:
   # Roles to install
