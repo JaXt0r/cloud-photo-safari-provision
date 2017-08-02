@@ -1,0 +1,21 @@
+# Use this file to set project specific config
+user:
+  keyboard_layout: en
+settings:
+  system:
+    use_proxy: false
+
+box:
+  usb2: true
+  memory: 4096
+  cpus: 4
+  monitorcount: 1
+  portforwardings:
+    - name: nodejs
+      protocol: tcp
+      host-port: 3000
+      guest-port: 3000
+
+ansible:
+  # Roles to install
+  roles: ["atom"]

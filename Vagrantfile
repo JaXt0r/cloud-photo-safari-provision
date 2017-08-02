@@ -1,14 +1,13 @@
-require_relative '01_installation/provision/ansible_vagrant'
+require_relative '01_installation/install'
+require_relative '02_configuration/configure'
+require_relative '03_customization/customize'
 
-ansible_tags = ["atom", "nodejs"]
 
-vm_options = {
-	memory: 4096
-}
-ansible_options = {
-	"playbook": "01_installation/provision/playbook.yml",
-  tags: ansible_tags,
-	extra_args: "./user.settings.yml"
-}
+# Download and Prepare base box with components
+install()
 
-configure_base( "AWS", vm_options, ansible_options )
+# Configure project specific settings
+configure()
+
+# Customize user specific settings
+customize()
