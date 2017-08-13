@@ -18,6 +18,12 @@
     name: "{{ download_cache_dir }}/{{ atom_version }}.{{ atom_archive_name }}"
     state: present
 
+
+- name: check atom launcher
+  command: cat /usr/share/applications/atom.desktop
+  register: atom_launcher_status
+  changed_when: False
+
 - name: "Fix for black screen on GNOME (tested with: v18.0; @see: https://discuss.atom.io/t/atom-now-shows-a-black-screen-on-startup/33245)"
   when: "box.desktop_environment|lower == 'gnome'"
   replace:
@@ -25,3 +31,4 @@
     regexp: '^(Exec=/.*?/atom )(.*)$'
     replace: '\1--disable-gpu \2'
     backup: yes
+  when: "'--disable-gpu' not in atom_launcher_status.stdout"

@@ -7,8 +7,9 @@ require 'uri'
 
 def configure( &block )
   puts "-----"
-  puts "Setup project-specific config."
-  puts "Not implemented right now, because no use atm."
+  puts "START loading project-specific folder."
+  puts "Not implemented right now, because there is currently no use."
   puts "Will be developed when needed."
+  puts "FINISH loading project-specific folder."
   puts "-----"
 end

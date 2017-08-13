@@ -6,12 +6,22 @@
     owner: root
     group: root
 
+
+- name: check keyboard profile
+  command: localectl
+  register: localectl_status
+  changed_when: False
+
 - name: set keyboard layout(s) No.1
   become: true
-  shell: "localectl set-keymap {{ user.keyboard_layouts }}"
+  command: "localectl set-keymap {{ user.keyboard_layouts }}"
+  when: "'VC Keymap: ' ~ user.keyboard_layouts not in localectl_status.stdout and 'VC X11 Layout: ' ~ user.keyboard_layouts not in localectl_status.stdout"
+
 - name: set keyboard layout(s) No.2
   become: true
-  shell: "localectl set-x11-keymap {{ user.keyboard_layouts }}"
+  command: "localectl set-x11-keymap {{ user.keyboard_layouts }}"
+  when: "'VC Keymap: ' ~ user.keyboard_layouts not in localectl_status.stdout and 'VC X11 Layout: ' ~ user.keyboard_layouts not in localectl_status.stdout"
+
 
 - name: install git cli client and firefox
   yum:
