@@ -25,7 +25,7 @@
 
 
 ###
-# Server
+# Nodejs
 ###
 
 - name: nodejs server
@@ -33,6 +33,14 @@
   become: true
   roles:
    - { role: nodejs, tags: ["nodejs"] }
+
+- name: nodejs development dependencies
+  hosts: all
+  become: true
+  roles:
+   - { role: nodejs-dev, tags: ["nodejs-dev"] }
+
+
 
 # Wowza
 - name: wowza streaming server

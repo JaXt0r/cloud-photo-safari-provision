@@ -1,0 +1,8 @@
+- name: install npm packages
+  npm:
+    name: "{{ item }}"
+    global: true
+    state: present
+  with_items:
+    - nodemon
+    - "@angular/cli"
