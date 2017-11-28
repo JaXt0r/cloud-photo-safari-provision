@@ -20,4 +20,4 @@ box:
 
 ansible:
   # Roles to install
-  roles: ["nodejs",  "atom", "nodejs-dev"]
+  roles: ["nodejs", "atom", "eclipse"]
