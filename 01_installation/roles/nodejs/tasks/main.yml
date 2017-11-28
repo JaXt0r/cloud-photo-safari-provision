@@ -4,3 +4,10 @@
     state: present
   with_items:
     - nodejs
+    - npm
+
+
+- name: fix openssl bug (https://stackoverflow.com/a/46476879)
+  yum:
+    name: openssl
+    state: latest

@@ -1,4 +1,5 @@
 - name: update http_proxy settings
+  become: true
   template:
     src: proxy.sh.j2
     dest: /etc/profile.d/proxy.sh
@@ -6,38 +7,53 @@
     owner: root
     group: root
 
+# Lasts way to long.
+#- name: Update yum itself
+#  become: true
+#  shell: "yum -y update"
 
-- name: check keyboard profile
-  command: localectl
-  register: localectl_status
-  changed_when: False
 
-- name: set keyboard layout(s) No.1
+- name: install some generic used elements
   become: true
-  command: "localectl set-keymap {{ user.keyboard_layouts }}"
-  when: "'VC Keymap: ' ~ user.keyboard_layouts not in localectl_status.stdout and 'VC X11 Layout: ' ~ user.keyboard_layouts not in localectl_status.stdout"
-
-- name: set keyboard layout(s) No.2
-  become: true
-  command: "localectl set-x11-keymap {{ user.keyboard_layouts }}"
-  when: "'VC Keymap: ' ~ user.keyboard_layouts not in localectl_status.stdout and 'VC X11 Layout: ' ~ user.keyboard_layouts not in localectl_status.stdout"
-
-
-- name: install git cli client and firefox
   yum:
     name: "{{ item }}"
     state: present
   with_items:
+    - yum-utils
+    - "@Development tools"
+    - epel-release # e.g. nodejs
     - git
-    - firefox
+
+
+- name: set keyboard layout(s)
+  become: true
+  block:
+    - shell: "localectl set-keymap {{ user.keyboard_layouts }}"
+    - shell: "localectl set-x11-keymap {{ user.keyboard_layouts }}"
+
+
+- name: Create Desktop folder if not yet exists
+  file:
+    path: /home/vagrant/Desktop
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: u+rwxr,g+xr,o+x
+
 
 - name: "prevent initial setup popup (https://seven.centos.org/2013/12/preventing-gnome3s-initial-setup/)"
   when: "box.desktop_environment|lower == 'gnome'"
-  copy:
-    dest: /home/vagrant/.config/gnome-initial-setup-done
-    content: yes
+  block:
+    - file: # Create directory, if not exists
+        path: /home/vagrant/.config/
+        state: directory
+    - copy:
+        dest: /home/vagrant/.config/gnome-initial-setup-done
+        content: yes
+
 
 - name: create cache dir if not exists
+  become: true
   file:
     dest: "{{ download_cache_dir }}"
     state: directory

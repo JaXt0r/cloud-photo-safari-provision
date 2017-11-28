@@ -33,25 +33,23 @@
     state: directory
 
 
-- name: download eclipse archive
-  get_url:
-    url:  "{{ eclipse_download_url }}"
-    dest: "{{ eclipse_package_download_path}}"
-
-
-- name: unpack eclipse archives
-  unarchive:
-    src: "{{ eclipse_package_download_path }}"
-    dest: "{{ eclipse_install_dir }}"
-    creates: "{{ eclipse_ini_path }}"
+- name: download and unpack eclipse archive
+  block:
+    - get_url:
+        url:  "{{ eclipse_download_url }}"
+        dest: "{{ eclipse_package_download_path}}"
+    - unarchive:
+        src: "{{ eclipse_package_download_path }}"
+        dest: "{{ eclipse_install_dir }}"
+        creates: "{{ eclipse_ini_path }}"
 
 
 - name: configure eclipse settings
   template:
     src: eclipse.ini.j2
     dest: "{{ eclipse_ini_path }}"
-    owner: root
-    group: root
+    owner: vagrant
+    group: vagrant
     mode: 0644
 
 
@@ -70,13 +68,25 @@
     mode: 0644
 
 
-- name: add eclipse icon to gnome start menu
+- name: Create start menu icon
   template:
     src: eclipse.desktop.j2
     dest: /usr/share/applications/eclipse.desktop
-    owner: root
-    group: root
+    owner: vagrant
+    group: vagrant
     mode: 0644
+
+- name: Create desktop icon
+  block:
+    - copy:
+        src: /usr/share/applications/eclipse.desktop
+        dest: /home/vagrant/Desktop/eclipse.desktop
+    - file:
+        path: /home/vagrant/Desktop/eclipse.desktop
+        state: file
+        owner: vagrant
+        group: vagrant
+        mode: u+x
 
 
 - name: create plugins install command
