@@ -1,6 +1,5 @@
 - name: general tasks
   hosts: all
-  become: true
   roles:
    - { role: general, tags: ["always"] }
 
@@ -25,7 +24,7 @@
 
 
 ###
-# Server
+# Environments
 ###
 
 - name: nodejs server
@@ -34,14 +33,14 @@
   roles:
    - { role: nodejs, tags: ["nodejs"] }
 
-# Wowza
-- name: wowza streaming server
+- name: python3
   hosts: all
   become: true
   roles:
-   - { role: wowza, tags: ["wowza"] }
-- name: wowza development with preconfigured eclipse
+   - { role: python3, tags: ["python3"] }
+
+- name: java
   hosts: all
   become: true
   roles:
-   - { role: wowza-dev, tags: ["wowza-dev"] }
+   - { role: java, tags: ["java"] }

@@ -18,6 +18,13 @@
     name: "{{ download_cache_dir }}/{{ atom_version }}.{{ atom_archive_name }}"
     state: present
 
+
+- name: set proxy to apm (atom package manager)
+  when: settings.system.use_proxy
+  become: false
+  shell: "apm config set proxy http://{{ settings.system.http_proxy }}"
+
+
 - name: "Fix for black screen on GNOME (tested with: v18.0; @see: https://discuss.atom.io/t/atom-now-shows-a-black-screen-on-startup/33245)"
   when: "box.desktop_environment|lower == 'gnome'"
   replace:
@@ -25,3 +32,15 @@
     regexp: '^(Exec=/.*?/atom )(.*)$'
     replace: '\1--disable-gpu \2'
     backup: yes
+
+- name: Copy application shortcut to desktop
+  block:
+    - copy:
+        src: /usr/share/applications/atom.desktop
+        dest: /home/vagrant/Desktop/atom.desktop
+    - file:
+        path: /home/vagrant/Desktop/atom.desktop
+        state: file
+        owner: vagrant
+        group: vagrant
+        mode: u+x

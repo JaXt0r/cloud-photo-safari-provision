@@ -19,7 +19,7 @@ def install( &block )
 
 
   full_settings     =  default_settings.deep_merge(project_settings).deep_merge(user_settings);
-  
+
   puts "used settings (combination of default-/project-/user-settings):"
   puts full_settings.to_yaml
   puts "---"
@@ -69,10 +69,11 @@ def install( &block )
       ansible.limit          = "all"
       ansible.extra_vars     = full_settings
     end
-    
+
     # Reboot after provisioning
     # Needed to have Desktop settings applied
-    config.vm.provision :unix_reboot
+    # TODO: Currently broken (2017-10-30). Need to recheck later.
+#    config.vm.provision :unix_reboot
 
 
     #fix:  “Warning: Unprotected Private Key File, this private key will be ignored.”
@@ -98,7 +99,7 @@ def install( &block )
 
 
     ## customize vm configuration
-      config.vm.provider :virtualbox do |vb|
+    config.vm.provider :virtualbox do |vb|
       vb.gui = true
       vb.name = "#{box_settings["name"]} - #{box_settings['distro'].gsub("/","-")} with #{box_settings['desktop_environment']}"
       vb.customize ["modifyvm", :id, "--graphicscontroller", "vboxvga"]
@@ -137,9 +138,9 @@ def install( &block )
         vb.customize ["modifyvm", :id, "--usb", "off"]
         vb.customize ["modifyvm", :id, "--usbehci", "off"]
       end
-      
-    end 
-    
+
+    end
+
     ## add share mapping to vm
     if box_settings.has_key?('shares')
       box_settings['shares'].each do |share|
@@ -165,7 +166,7 @@ end
 
 
 def install_plugins()
-  required_plugins = %w(vagrant-vbguest vagrant-cachier kwalify)
+  required_plugins = %w(vagrant-vbguest vagrant-proxyconf vagrant-cachier kwalify)
 
   plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
   if not plugins_to_install.empty?
@@ -187,10 +188,12 @@ def validate_schema( config )
   schema = YAML.load_file('01_installation/settings.schema.yml')
   validator = Kwalify::Validator.new(schema)
   errors = validator.validate(config)
-  
+
   if errors && !errors.empty?
-    puts "Schema errors:"
+    puts "\n\n"
+    puts "### Schema errors:"
     puts errors
+    puts "\n\n"
     raise 'There are schema errors. Fix them before going on.'
   end
 end
